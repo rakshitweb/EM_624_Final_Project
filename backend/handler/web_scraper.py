@@ -1,8 +1,11 @@
 import bs4 as bs
 import requests
 import numpy as np
+from nltk.tokenize import RegexpTokenizer
 
 class WebScraper:
+    splitter = RegexpTokenizer(r'\w+')
+    
     @staticmethod
     def get_website_soup(website_link: str):
         body = requests.get(website_link)
@@ -23,3 +26,12 @@ class WebScraper:
                 headings.append(heading.text)
                 
         return np.concat([headings, paragraphs])
+    
+    @staticmethod
+    def scrape_words_from_file(file_data:str):
+        tokens = WebScraper.splitter.tokenize(file_data)
+        filtered_words = []
+        for word in tokens:
+            if len(word) > 2:
+                filtered_words.append(word)
+        return filtered_words

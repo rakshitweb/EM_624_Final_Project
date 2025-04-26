@@ -3,3 +3,6 @@
 
 # ENV File
 .env
+
+# processed Files
+/public/data

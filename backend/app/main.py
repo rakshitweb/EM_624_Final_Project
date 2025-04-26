@@ -2,6 +2,7 @@ from fastapi import FastAPI, Body, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from handler.web_scraper import WebScraper
 from handler.blob_storage import BlobStorage
+from collections import Counter
 
 app = FastAPI()
 
@@ -29,6 +30,14 @@ def upload_input(type: str = None, body: dict = Body(...)):
     
     return {"message": "File uploaded successfull", "resource_id": random_uuid}
 
-@app.get('/scraped-words')
-def get_scraped_words(range: int, resource_id: str):
-    return {"message": "Word Scrapping successful", "word_frequency": {"rakshit": 10}}
+@app.get('/scrape-words')
+def get_scraped_words(resource_id: str, range: int = 15):
+    try:
+        BlobStorage.verify_resource_id('input_files', resource_id)
+    except FileNotFoundError as error:
+        return {"error": str(error)}
+    file_data = BlobStorage.get_file_data('input_files', resource_id, 'input_file.txt')
+    word_list = WebScraper.scrape_words_from_file(file_data)
+    frequency = Counter(word_list)
+    range_frequency = frequency.most_common(int(range))
+    return {"message": "Word Scrapping successful", "word_frequency": dict(range_frequency)}
