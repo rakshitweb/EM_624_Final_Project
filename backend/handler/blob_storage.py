@@ -9,8 +9,8 @@ STORAGE_PATH = os.path.abspath(STORAGE_PATH)
 
 class BlobStorage:
     @staticmethod
-    def upload_file(user_id:str, file_name:str, data: str):
-        directory_path = os.path.join(STORAGE_PATH, str(user_id))
+    def upload_file(directory: str, user_id:str, file_name:str, data: str):
+        directory_path = os.path.join(STORAGE_PATH, directory, str(user_id))
         os.makedirs(directory_path, exist_ok=True)
         file_path = os.path.join(directory_path, file_name)
         with open(file_path, 'w') as file:

@@ -18,11 +18,17 @@ app.add_middleware(
 def upload_input(type: str = None, body: dict = Body(...)):
     random_uuid = BlobStorage.generate_uuid()
     if type == 'text':
-        BlobStorage.upload_file(random_uuid, 'input_file.txt', str(body['payload']))
+        data = str(body['payload'])
     elif type == 'url':
         website_soup = WebScraper.get_website_soup(body['payload'])
         website_content = WebScraper.scrape_website_soup(website_soup)
-        BlobStorage.upload_file(random_uuid, 'input_file.txt', '\n'.join(website_content))
+        data = '\n'.join(website_content)
     else:
         raise HTTPException(status_code=400, detail="Input type not supported")
+    BlobStorage.upload_file('input_files', random_uuid, 'input_file.txt', data)
+    
     return {"message": "File uploaded successfull", "resource_id": random_uuid}
+
+@app.get('/scraped-words')
+def get_scraped_words(range: int, resource_id: str):
+    return {"message": "Word Scrapping successful", "word_frequency": {"rakshit": 10}}

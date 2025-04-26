@@ -131,7 +131,16 @@
         "kind": 2,
         "importPath": "backend.app.main",
         "description": "backend.app.main",
-        "peekOfCode": "def upload_input(type: str = None, body: dict = Body(...)):\n    random_uuid = BlobStorage.generate_uuid()\n    if type == 'text':\n        BlobStorage.upload_file(random_uuid, 'input_file.txt', str(body['payload']))\n    elif type == 'url':\n        website_soup = WebScraper.get_website_soup(body['payload'])\n        website_content = WebScraper.scrape_website_soup(website_soup)\n        BlobStorage.upload_file(random_uuid, 'input_file.txt', '\\n'.join(website_content))\n    else:\n        raise HTTPException(status_code=400, detail=\"Input type not supported\")",
+        "peekOfCode": "def upload_input(type: str = None, body: dict = Body(...)):\n    random_uuid = BlobStorage.generate_uuid()\n    if type == 'text':\n        data = str(body['payload'])\n    elif type == 'url':\n        website_soup = WebScraper.get_website_soup(body['payload'])\n        website_content = WebScraper.scrape_website_soup(website_soup)\n        data = '\\n'.join(website_content)\n    else:\n        raise HTTPException(status_code=400, detail=\"Input type not supported\")",
+        "detail": "backend.app.main",
+        "documentation": {}
+    },
+    {
+        "label": "get_scraped_words",
+        "kind": 2,
+        "importPath": "backend.app.main",
+        "description": "backend.app.main",
+        "peekOfCode": "def get_scraped_words(range: int, resource_id: str):\n    return {\"message\": \"Word Scrapping successful\", \"word_frequency\": {\"rakshit\": 10}}",
         "detail": "backend.app.main",
         "documentation": {}
     },
@@ -149,7 +158,7 @@
         "kind": 6,
         "importPath": "backend.handler.blob_storage",
         "description": "backend.handler.blob_storage",
-        "peekOfCode": "class BlobStorage:\n    @staticmethod\n    def upload_file(user_id:str, file_name:str, data: str):\n        directory_path = os.path.join(STORAGE_PATH, str(user_id))\n        os.makedirs(directory_path, exist_ok=True)\n        file_path = os.path.join(directory_path, file_name)\n        with open(file_path, 'w') as file:\n            file.write(data)\n    @staticmethod\n    def generate_uuid():",
+        "peekOfCode": "class BlobStorage:\n    @staticmethod\n    def upload_file(directory: str, user_id:str, file_name:str, data: str):\n        directory_path = os.path.join(STORAGE_PATH, directory, str(user_id))\n        os.makedirs(directory_path, exist_ok=True)\n        file_path = os.path.join(directory_path, file_name)\n        with open(file_path, 'w') as file:\n            file.write(data)\n    @staticmethod\n    def generate_uuid():",
         "detail": "backend.handler.blob_storage",
         "documentation": {}
     },
@@ -158,7 +167,7 @@
         "kind": 5,
         "importPath": "backend.handler.blob_storage",
         "description": "backend.handler.blob_storage",
-        "peekOfCode": "BASE_DIR = os.path.dirname(os.path.abspath(__file__))\nSTORAGE_PATH = os.getenv(\"STORAGE_PATH\")\nDIRECTORY = os.path.join(BASE_DIR, '..', STORAGE_PATH)  # Navigate to the 'public' folder inside your project\nSTORAGE_PATH = os.path.abspath(STORAGE_PATH)\nclass BlobStorage:\n    @staticmethod\n    def upload_file(user_id:str, file_name:str, data: str):\n        directory_path = os.path.join(STORAGE_PATH, str(user_id))\n        os.makedirs(directory_path, exist_ok=True)\n        file_path = os.path.join(directory_path, file_name)",
+        "peekOfCode": "BASE_DIR = os.path.dirname(os.path.abspath(__file__))\nSTORAGE_PATH = os.getenv(\"STORAGE_PATH\")\nDIRECTORY = os.path.join(BASE_DIR, '..', STORAGE_PATH)  # Navigate to the 'public' folder inside your project\nSTORAGE_PATH = os.path.abspath(STORAGE_PATH)\nclass BlobStorage:\n    @staticmethod\n    def upload_file(directory: str, user_id:str, file_name:str, data: str):\n        directory_path = os.path.join(STORAGE_PATH, directory, str(user_id))\n        os.makedirs(directory_path, exist_ok=True)\n        file_path = os.path.join(directory_path, file_name)",
         "detail": "backend.handler.blob_storage",
         "documentation": {}
     },
@@ -167,7 +176,7 @@
         "kind": 5,
         "importPath": "backend.handler.blob_storage",
         "description": "backend.handler.blob_storage",
-        "peekOfCode": "STORAGE_PATH = os.getenv(\"STORAGE_PATH\")\nDIRECTORY = os.path.join(BASE_DIR, '..', STORAGE_PATH)  # Navigate to the 'public' folder inside your project\nSTORAGE_PATH = os.path.abspath(STORAGE_PATH)\nclass BlobStorage:\n    @staticmethod\n    def upload_file(user_id:str, file_name:str, data: str):\n        directory_path = os.path.join(STORAGE_PATH, str(user_id))\n        os.makedirs(directory_path, exist_ok=True)\n        file_path = os.path.join(directory_path, file_name)\n        with open(file_path, 'w') as file:",
+        "peekOfCode": "STORAGE_PATH = os.getenv(\"STORAGE_PATH\")\nDIRECTORY = os.path.join(BASE_DIR, '..', STORAGE_PATH)  # Navigate to the 'public' folder inside your project\nSTORAGE_PATH = os.path.abspath(STORAGE_PATH)\nclass BlobStorage:\n    @staticmethod\n    def upload_file(directory: str, user_id:str, file_name:str, data: str):\n        directory_path = os.path.join(STORAGE_PATH, directory, str(user_id))\n        os.makedirs(directory_path, exist_ok=True)\n        file_path = os.path.join(directory_path, file_name)\n        with open(file_path, 'w') as file:",
         "detail": "backend.handler.blob_storage",
         "documentation": {}
     },
@@ -176,7 +185,7 @@
         "kind": 5,
         "importPath": "backend.handler.blob_storage",
         "description": "backend.handler.blob_storage",
-        "peekOfCode": "DIRECTORY = os.path.join(BASE_DIR, '..', STORAGE_PATH)  # Navigate to the 'public' folder inside your project\nSTORAGE_PATH = os.path.abspath(STORAGE_PATH)\nclass BlobStorage:\n    @staticmethod\n    def upload_file(user_id:str, file_name:str, data: str):\n        directory_path = os.path.join(STORAGE_PATH, str(user_id))\n        os.makedirs(directory_path, exist_ok=True)\n        file_path = os.path.join(directory_path, file_name)\n        with open(file_path, 'w') as file:\n            file.write(data)",
+        "peekOfCode": "DIRECTORY = os.path.join(BASE_DIR, '..', STORAGE_PATH)  # Navigate to the 'public' folder inside your project\nSTORAGE_PATH = os.path.abspath(STORAGE_PATH)\nclass BlobStorage:\n    @staticmethod\n    def upload_file(directory: str, user_id:str, file_name:str, data: str):\n        directory_path = os.path.join(STORAGE_PATH, directory, str(user_id))\n        os.makedirs(directory_path, exist_ok=True)\n        file_path = os.path.join(directory_path, file_name)\n        with open(file_path, 'w') as file:\n            file.write(data)",
         "detail": "backend.handler.blob_storage",
         "documentation": {}
     },
@@ -185,7 +194,7 @@
         "kind": 5,
         "importPath": "backend.handler.blob_storage",
         "description": "backend.handler.blob_storage",
-        "peekOfCode": "STORAGE_PATH = os.path.abspath(STORAGE_PATH)\nclass BlobStorage:\n    @staticmethod\n    def upload_file(user_id:str, file_name:str, data: str):\n        directory_path = os.path.join(STORAGE_PATH, str(user_id))\n        os.makedirs(directory_path, exist_ok=True)\n        file_path = os.path.join(directory_path, file_name)\n        with open(file_path, 'w') as file:\n            file.write(data)\n    @staticmethod",
+        "peekOfCode": "STORAGE_PATH = os.path.abspath(STORAGE_PATH)\nclass BlobStorage:\n    @staticmethod\n    def upload_file(directory: str, user_id:str, file_name:str, data: str):\n        directory_path = os.path.join(STORAGE_PATH, directory, str(user_id))\n        os.makedirs(directory_path, exist_ok=True)\n        file_path = os.path.join(directory_path, file_name)\n        with open(file_path, 'w') as file:\n            file.write(data)\n    @staticmethod",
         "detail": "backend.handler.blob_storage",
         "documentation": {}
     },
