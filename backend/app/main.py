@@ -7,7 +7,7 @@ from handler.analyzer import Analyzer
 from collections import Counter
 import json
 import os
-from io import BytesIO
+from nltk.util import bigrams
 
 app = FastAPI()
 
@@ -59,7 +59,8 @@ def filter_words(resource_id: str, body: dict = Body(...)):
     analyzer = Analyzer()
     sentiment_score = analyzer.get_sentiment_analysis(word_list)
     unique_word_ratio = len(set(word_list))/len(word_list)
-    BlobStorage.upload_file('output_files', resource_id, 'sentiment.json', json.dumps({"sentiment_score":sentiment_score, "lexical_score": unique_word_ratio}))
+    top_pairs = Counter(bigrams(word_list)).most_common(5)
+    BlobStorage.upload_file('output_files', resource_id, 'sentiment.json', json.dumps({"sentiment_score":sentiment_score, "lexical_score": unique_word_ratio, "bigrams": top_pairs}))
     word_cloud_img = analyzer.get_word_cloud(word_list)
     directory_path = BlobStorage.get_directory_path('output_files', resource_id)
     word_cloud_img.to_file(f"{directory_path}/word_cloud.png")

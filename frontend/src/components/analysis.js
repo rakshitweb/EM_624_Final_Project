@@ -82,6 +82,25 @@ export const Analysis = () => {
                 </Typography>
               </Typography>
             </Box>
+            <Box>
+              <Typography variant="h5">Frequent Bigrams</Typography>
+              {stats?.bigrams?.map((bigram, index) => (
+                <Typography key={`bigram-${index}`}>
+                  (
+                  <Typography component="span" variant="h6" color="primary">
+                    {bigram[0][0]}
+                  </Typography>
+                  ,{" "}
+                  <Typography component="span" variant="h6" color="primary">
+                    {bigram[0][1]}
+                  </Typography>
+                  ):{" "}
+                  <Typography component="span" variant="h6" color="primary">
+                    {bigram[1]}
+                  </Typography>
+                </Typography>
+              ))}
+            </Box>
           </Stack>
         </>
       )}
