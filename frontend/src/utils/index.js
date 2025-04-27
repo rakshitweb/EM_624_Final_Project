@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export const BASE_URL = "http://localhost:8080/";
+export const BASE_URL = "https://em-624-final-project.onrender.com/";
 
 export const request = async (url, query = {}, body = null, method = "GET") => {
   const URL = BASE_URL + url;
