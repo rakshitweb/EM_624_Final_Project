@@ -28,10 +28,10 @@ class WebScraper:
         return np.concat([headings, paragraphs])
     
     @staticmethod
-    def scrape_words_from_file(file_data:str):
+    def scrape_words_from_file(file_data:str, filter_words:list = []):
         tokens = WebScraper.splitter.tokenize(file_data)
         filtered_words = []
         for word in tokens:
-            if len(word) > 2:
+            if len(word) > 2 and word not in filter_words:
                 filtered_words.append(word)
         return filtered_words

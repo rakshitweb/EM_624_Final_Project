@@ -11,7 +11,7 @@ class BlobStorage:
     @staticmethod
     def get_file_data(directory:str, resource_id:str, file_name: str):
         file_path = os.path.join(STORAGE_PATH, directory, str(resource_id), file_name)
-        with open(file_path, "r", encoding='utf-8') as file:
+        with open(file_path, "r") as file:
             file_data = file.read().lower().replace("\n", " ")
             return file_data
     
@@ -32,3 +32,8 @@ class BlobStorage:
     @staticmethod
     def generate_uuid():
         return uuid.uuid4()
+    
+    @staticmethod
+    def get_directory_path(directory:str, resource_id: str):
+        directory_path = os.path.join(STORAGE_PATH, directory, str(resource_id))
+        return directory_path

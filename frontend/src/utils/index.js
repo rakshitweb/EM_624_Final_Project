@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const BASE_URL = "http://localhost:8080/";
+export const BASE_URL = "http://localhost:8080/";
 
 export const request = async (url, query = {}, body = null, method = "GET") => {
   const URL = BASE_URL + url;
@@ -17,3 +17,15 @@ export const request = async (url, query = {}, body = null, method = "GET") => {
 
   return response;
 };
+
+export function getQueryParam(param) {
+  const search = window.location.search;
+  const params = new URLSearchParams(search);
+  return params.get(param);
+}
+
+export function removeQueryParams() {
+  // Remove query parameters from the URL
+  const url = window.location.protocol + "//" + window.location.host + window.location.pathname;
+  window.history.replaceState({}, "", url);
+}
